@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'NSAF',
-    version = '0.0.1',
+    version = '0.0.2',
     keywords='nsaf neuroscience atlas brain',
     description = 'A python lib non-standard atlas format',
     license = 'MIT License',

@@ -28,7 +28,7 @@ class LabelSheetSet():
             self.l10n_sheet = None
     
     def query(self, idx):
-        if not self.l10n_exists:
+        if not self.l10n_exists or idx == 0:
             return self.main_sheet.query(idx)
         else:
             return {**self.main_sheet.query(idx), **self.l10n_sheet.query(idx)}

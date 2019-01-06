@@ -5,6 +5,8 @@ from csv import DictReader
 
 from . import LABEL_SHEET_ITEMS
 
+__BLANK_QUERY__ = {'idx': 0, 'label': '', 'name': '', 'abbr': ''}
+
 class LabelSheet():
     def __init__(self, x):
         assert os.access(x, os.R_OK), 'Main label file not readable.'
@@ -28,7 +30,7 @@ class LabelSheet():
         if idx in self.labels:
             return self.labels[idx]
         else:
-            return None
+            return __BLANK_QUERY__
 
     def available(self, col):
         return col in self.available_items

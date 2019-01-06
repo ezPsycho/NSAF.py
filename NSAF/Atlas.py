@@ -46,7 +46,7 @@ class Atlas():
 
     def _draw_sphere(self, coord, radius):
         border_min = tuple(map(lambda x: self._border_min_check(coord[x] - radius), range(3)))
-        border_max = tuple(map(lambda x: self._border_max_check(coord[x] + radius), range(3)))
+        border_max = tuple(map(lambda x: self._border_max_check(coord[x] + radius, x), range(3)))
 
         mesh = itertools.product(
             range(border_min[0], border_max[0] + 1), 
@@ -60,12 +60,14 @@ class Atlas():
             distance = math.sqrt(sum([(a - b) ** 2 for a, b in zip(_p, coord)]))
             if distance < radius:
                 target_points.append(_p)
+        
+        return target_points
     
     def query_sphere(self, coord, radius):
         coords = self._draw_sphere(coord, radius)
 
         idxs = list(map(self.idx_img.query, coords))
-        dists = idxs = list(map(self.dist_img.query, coords))
+        dists = list(map(self.dist_img.query, coords))
 
         count_table = {}
 
@@ -75,16 +77,19 @@ class Atlas():
                     count_table[idxs[_]] = 1
                 else:
                     count_table[idxs[_]] += 1
-        
+
         result = []
 
         for _idx in count_table.keys():
+            if _idx == 0: 
+                continue
+            
             label = self.labels.query(_idx)
             label['ratio'] = count_table[_idx] / len(coords)
 
-            result.append(result)
+            result.append(label)
 
-        return result
+        return sorted(result, key=lambda x: -x['ratio'])
 
     def query(self, coord, radius = None):
         if radius:
