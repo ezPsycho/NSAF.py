@@ -93,9 +93,9 @@ class Atlas():
 
     def query(self, coord, radius = None):
         if radius:
-            return self.query_sphere(coord, radius)
+            return [self.query_point(coord)] + self.query_sphere(coord, radius)
         else:
-            return self.query_point(coord)
+            return [self.query_point(coord)]
 
     def batch_query(self, coords, radius = None):
         return list(map(lambda x: self.query(x, radius), coords))
