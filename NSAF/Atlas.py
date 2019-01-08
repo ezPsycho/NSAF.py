@@ -28,7 +28,7 @@ class Atlas():
         assert self.idx_img.shape == self.dist_img.shape, 'The shape of idx image and dist image is not consistent.'
         assert self.idx_img.offset == self.dist_img.offset, 'The offset of idx image and dist image is not consistent.'
 
-        self.labels = LabelSheetSet(self._base_path)
+        self.labels = LabelSheetSet(self._base_path, lang)
     
     def query_point(self, coord):
         idx = self.idx_img.query(coord)
