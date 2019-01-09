@@ -29,6 +29,7 @@ class Atlas():
         assert self.idx_img.offset == self.dist_img.offset, 'The offset of idx image and dist image is not consistent.'
 
         self.labels = LabelSheetSet(self._base_path, lang)
+        self.ck_boundary = self.idx_img.ck_boundary
     
     def query_point(self, coord):
         idx = self.idx_img.query(coord)
@@ -37,16 +38,16 @@ class Atlas():
 
         return {'coord': coord, 'dist': dist, **label}
     
-    def _border_min_check(self, x):
+    def _within_little(self, x):
         return 0 if x < 0 else x
     
-    def _border_max_check(self, x, dim):
+    def _within_big(self, x, dim):
         dim_border = self.idx_img.shape[dim] - self.idx_img.offset[dim]
         return dim_border if x > dim_border else x
 
     def _draw_sphere(self, coord, radius):
-        border_min = tuple(map(lambda x: self._border_min_check(coord[x] - radius), range(3)))
-        border_max = tuple(map(lambda x: self._border_max_check(coord[x] + radius, x), range(3)))
+        border_min = tuple(map(lambda x: self._within_little(coord[x] - radius), range(3)))
+        border_max = tuple(map(lambda x: self._within_big(coord[x] + radius, x), range(3)))
 
         mesh = itertools.product(
             range(border_min[0], border_max[0] + 1), 

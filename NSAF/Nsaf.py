@@ -47,6 +47,14 @@ class Nsaf():
     def query(self, coord):
         return self.get_data_bytes(self.w2d(coord))
     
+    def ck_boundary(self, coord):
+        dcoord = self.w2d(coord)
+
+        within_little = all(map(lambda x: x > 0, dcoord))
+        within_big = all(map(lambda x: dcoord[x] + 1 < self.shape[x], range(3)))
+        
+        return within_little and within_big
+
     def w2d(self, coord):
         return (
             coord[0] + self._o0, 
